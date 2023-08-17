@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS person (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    firstName VARCHAR(255),
+    lastName VARCHAR(255)
+);

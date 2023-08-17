@@ -1,5 +1,6 @@
-package com.example.springbatch
+package com.example.springbatch.jobs
 
+import com.example.springbatch.domain.Person
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing
@@ -21,7 +22,7 @@ import org.springframework.core.io.ClassPathResource
 @EnableBatchProcessing
 open class BatchConfiguration(
     private val jobBuilderFactory: JobBuilderFactory,
-    private val stepBuilderFactory: StepBuilderFactory
+    private val stepBuilderFactory: StepBuilderFactory,
 ) {
 
     @Bean
@@ -53,24 +54,22 @@ open class BatchConfiguration(
         items.forEach { println(it) }
     }
 
-    @Bean
-    open fun step(stepBuilderFactory: StepBuilderFactory, reader: ItemReader<Person>, writer: ItemWriter<Person>, processor: ItemProcessor<Person, Person>): Step {
-        return stepBuilderFactory.get("step1")
-            .chunk<Person, Person>(10)
-            .reader(reader)
-            .processor(processor)
-            .writer(writer)
-            .build()
-    }
-
-    @Bean
-    open fun job(jobBuilderFactory: JobBuilderFactory, step: Step): Job {
-        return jobBuilderFactory["sampleJob"]
-            .incrementer(RunIdIncrementer())
-            .flow(step)
-            .end()
-            .build()
-    }
+//    @Bean
+//    open fun step(stepBuilderFactory: StepBuilderFactory, reader: ItemReader<Person>, writer: ItemWriter<Person>, processor: ItemProcessor<Person, Person>): Step {
+//        return stepBuilderFactory.get("step1")
+//            .chunk<Person, Person>(10)
+//            .reader(reader)
+//            .processor(processor)
+//            .writer(writer)
+//            .build()
+//    }
+//
+//    @Bean
+//    open fun job(jobBuilderFactory: JobBuilderFactory, step: Step): Job {
+//        return jobBuilderFactory["sampleJob"]
+//            .incrementer(RunIdIncrementer())
+//            .flow(step)
+//            .end()
+//            .build()
+//    }
 }
-
-data class Person(val firstName: String, val lastName: String)
