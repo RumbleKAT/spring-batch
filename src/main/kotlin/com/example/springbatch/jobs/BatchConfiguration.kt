@@ -54,22 +54,22 @@ open class BatchConfiguration(
         items.forEach { println(it) }
     }
 
-//    @Bean
-//    open fun step(stepBuilderFactory: StepBuilderFactory, reader: ItemReader<Person>, writer: ItemWriter<Person>, processor: ItemProcessor<Person, Person>): Step {
-//        return stepBuilderFactory.get("step1")
-//            .chunk<Person, Person>(10)
-//            .reader(reader)
-//            .processor(processor)
-//            .writer(writer)
-//            .build()
-//    }
-//
-//    @Bean
-//    open fun job(jobBuilderFactory: JobBuilderFactory, step: Step): Job {
-//        return jobBuilderFactory["sampleJob"]
-//            .incrementer(RunIdIncrementer())
-//            .flow(step)
-//            .end()
-//            .build()
-//    }
+    @Bean
+    open fun readPersonStep(): Step {
+        return stepBuilderFactory.get("step1")
+            .chunk<Person, Person>(10)
+            .reader(reader())
+            .processor(process())
+            .writer(write())
+            .build()
+    }
+
+    @Bean
+    open fun readPersonJob(jobBuilderFactory: JobBuilderFactory) :Job{
+        return jobBuilderFactory["combinedJob2"]
+            .incrementer(RunIdIncrementer())
+            .start(readPersonStep())  // Start with chunkStep
+            .build()
+    }
+
 }
