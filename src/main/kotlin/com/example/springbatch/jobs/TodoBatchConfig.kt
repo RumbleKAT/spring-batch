@@ -47,7 +47,8 @@ open class TodoBatchConfig(
     @Bean
     @StepScope
     open fun todoReader(@Value("#{jobParameters['idx']}") idx: Long?): ItemReader<Todo> {
-        println(idx)
+        if(idx==null) return ListItemReader(emptyList());
+        println("idx::$idx")
         val actualIdx = idx ?: 1L
         val todo = restTemplate().getForObject("https://jsonplaceholder.typicode.com/todos/${actualIdx}", Todo::class.java)!!
         return ListItemReader(listOf(todo))
